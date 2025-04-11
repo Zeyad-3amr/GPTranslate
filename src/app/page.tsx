@@ -1,49 +1,52 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
+} from '@heroui/react';
+import { GiRobotGolem } from 'react-icons/gi';
+import { TbLanguage } from 'react-icons/tb';
 
 const languageOptions = [
-  {
-    name: 'Spanish',
-    emoji: '🇪🇸',
-    greeting: 'Hola',
-  },
-  {
-    name: 'French',
-    emoji: '🇫🇷',
-    greeting: 'Bonjour',
-  },
-  {
-    name: 'Arabic',
-    emoji: '🇦🇪',
-    greeting: 'مرحبا',
-  },
+  { name: 'English', code: 'en', flagUrl: 'https://flagcdn.com/w40/us.png' },
+  { name: 'Spanish', code: 'es', flagUrl: 'https://flagcdn.com/w40/es.png' },
+  { name: 'French', code: 'fr', flagUrl: 'https://flagcdn.com/w40/fr.png' },
+  { name: 'German', code: 'de', flagUrl: 'https://flagcdn.com/w40/de.png' },
+  { name: 'Arabic', code: 'ar', flagUrl: 'https://flagcdn.com/w40/sa.png' },
+  { name: 'Chinese ', code: 'zh', flagUrl: 'https://flagcdn.com/w40/cn.png' },
+  { name: 'Hindi', code: 'hi', flagUrl: 'https://flagcdn.com/w40/in.png' },
+  { name: 'Portuguese', code: 'pt', flagUrl: 'https://flagcdn.com/w40/pt.png' },
+  { name: 'Russian', code: 'ru', flagUrl: 'https://flagcdn.com/w40/ru.png' },
+  { name: 'Japanese', code: 'ja', flagUrl: 'https://flagcdn.com/w40/jp.png' },
+  { name: 'Korean', code: 'ko', flagUrl: 'https://flagcdn.com/w40/kr.png' },
+  { name: 'Italian', code: 'it', flagUrl: 'https://flagcdn.com/w40/it.png' },
+  { name: 'Turkish', code: 'tr', flagUrl: 'https://flagcdn.com/w40/tr.png' },
+  { name: 'Dutch', code: 'nl', flagUrl: 'https://flagcdn.com/w40/nl.png' },
+  { name: 'Bengali', code: 'bn', flagUrl: 'https://flagcdn.com/w40/bd.png' },
+  { name: 'Urdu', code: 'ur', flagUrl: 'https://flagcdn.com/w40/pk.png' },
+  { name: 'Vietnamese', code: 'vi', flagUrl: 'https://flagcdn.com/w40/vn.png' },
+  { name: 'Persian', code: 'fa', flagUrl: 'https://flagcdn.com/w40/ir.png' },
+  { name: 'Swahili', code: 'sw', flagUrl: 'https://flagcdn.com/w40/ke.png' },
+  { name: 'Thai', code: 'th', flagUrl: 'https://flagcdn.com/w40/th.png' },
 ];
 
 export default function Home() {
   const [text, setText] = useState('');
-  const [language, setLanguage] = useState('Spanish');
-  const [translatedText, setTranslatedText] = useState('');
-  const [greetingIndex, setGreetingIndex] = useState(0);
+  // const [language, setLanguage] = useState('Spanish');
+  const [toLanguage, setToLanguage] = useState(languageOptions[4]);
+  // const [greetingIndex, setGreetingIndex] = useState(0);
   const [fade, setFade] = useState('opacity-100');
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFade('opacity-0');
-
-      setTimeout(() => {
-        setGreetingIndex((prevIndex) => (prevIndex + 1) % languageOptions.length);
-        setFade('opacity-100');
-      }, 500);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
+  const [fromLanguage, setFromLanguage] = useState(languageOptions[0]);
+  const [translatedText, setTranslatedText] = useState('');
 
   const handleTranslate = async () => {
     const res = await fetch('/api/translate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, language }),
+      body: JSON.stringify({ text, toLanguage, fromLanguage }),
     });
     const data = await res.json();
     console.log(data);
@@ -51,55 +54,141 @@ export default function Home() {
   };
 
   // Current rotating greeting
-  const rotatingGreeting = languageOptions[greetingIndex].greeting;
+  // const rotatingGreeting = languageOptions[greetingIndex].greeting;
 
   return (
-    <div className="min-h-screen bg-gray-800 flex flex-col gap-5 items-center justify-center p-4">
-      <div className="max-w-md w-full space-y-6">
-        <div className="bg-white p-8 rounded shadow-lg w-full">
-          <h1 className="text-3xl font-bold mb-6 text-center text-black">
-            AI Translator
-          </h1>
+    <div className=" flex flex-col max-w-7xl items-center justify-center mx-auto px-6   ">
+      <div className="max-w-4xl  w-full space-y-6 ">
+        <div className="flex flex-col  items-center bg-white p-5  rounded border border-blue-400 shadow-lg w-full">
+          <div className="flex justify-center items-center  text-blue-500 gap-2">
+            <h1 className="text-3xl  font-bold text-center mb-3 text-blue-500">
+              GPTranslate
+            </h1>
+            <TbLanguage size={50} />
+          </div>
           <textarea
-            className="w-full p-3 border rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            className="w-full font-semibold  p-3 border border-blue-400 rounded mb-4 focus:outline-none focus:ring-1 focus:ring-blue-400 text-black resize-none"
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Enter text to translate..."
             rows={4}
           />
-          <div className="mb-4 flex flex-col gap-3">
-            {languageOptions.map((option) => (
-              <label
-                key={option.name}
-                className="flex items-center space-x-3 cursor-pointer text-black"
-              >
-                <input
-                  type="radio"
-                  name="language"
-                  value={option.name}
-                  checked={language === option.name}
-                  onChange={(e) => setLanguage(e.target.value)}
-                  className="form-radio h-5 w-5 text-blue-500"
-                />
-                <span className="text-2xl">{option.emoji}</span>
-                <span>{option.name}</span>
-              </label>
-            ))}
+
+          <div className=" flex justify-around w-full ">
+            <div className="mb-4 flex justify-center items-center gap-3 ">
+              <label className="text-blue-500 font-bold">From :</label>
+              <Dropdown>
+                <DropdownTrigger className="flex ">
+                  <Button
+                    variant="bordered"
+                    className=" text-lg p-2 rounded-md bg-blue-500 hover:bg-blue-700 transition-all duration-100 ease-in-out font-semibold w-40 "
+                  >
+                    <img
+                      src={fromLanguage.flagUrl}
+                      alt={fromLanguage.name}
+                      className="w-10 h-6 border rounded"
+                    />
+                    {fromLanguage.name}
+                  </Button>
+                </DropdownTrigger>
+
+                <DropdownMenu
+                  selectedKeys={fromLanguage.name}
+                  selectionMode="single"
+                  onAction={(key) => {
+                    const lang = languageOptions.find((l) => l.code === key);
+                    if (lang) setFromLanguage(lang);
+                    setText('');
+                  }}
+                  className="bg-blue-500 w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-black custom-scrollbar"
+                >
+                  {languageOptions.map((lang) => (
+                    <DropdownItem
+                      key={lang.code}
+                      className=" flex justify-start mb-2  hover:bg-blue-700 rounded-md transition-all duration-100 ease-in-out"
+                    >
+                      <div className="flex gap-2 items-center min-w-full  p-2">
+                        <img
+                          src={lang.flagUrl}
+                          alt={lang.name}
+                          className="w-8 rounded-md h-5"
+                        />
+                        <span className="font-semibold">{lang.name}</span>
+                      </div>
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+
+            {/* <div className="flex mb-5 text-blue-500 gap-2">
+              <GiRobotGolem size={55} />
+              <TbLanguage size={50} />
+            </div> */}
+
+            <div className="mb-4 flex justify-center items-center gap-3 ">
+              <label className="text-blue-500 font-bold">To:</label>
+              <Dropdown>
+                <DropdownTrigger className="flex ">
+                  <Button
+                    variant="bordered"
+                    className=" text-lg p-2 rounded-md bg-blue-500 hover:bg-blue-700 transition-all duration-100 ease-in-out
+                    font-semibold w-40 "
+                  >
+                    <img
+                      src={toLanguage.flagUrl}
+                      alt={toLanguage.name}
+                      className="w-10 h-6  border rounded"
+                    />
+                    {toLanguage.name}
+                  </Button>
+                </DropdownTrigger>
+
+                <DropdownMenu
+                  selectedKeys={toLanguage.name}
+                  selectionMode="single"
+                  onAction={(key) => {
+                    const lang = languageOptions.find((l) => l.code === key);
+                    if (lang) setToLanguage(lang);
+                  }}
+                  className="bg-blue-500 w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-black custom-scrollbar"
+                >
+                  {languageOptions.map((lang) => (
+                    <DropdownItem
+                      key={lang.code}
+                      className="flex justify-start mb-2  hover:bg-blue-700 rounded-md transition-all duration-100 ease-in-out"
+                    >
+                      <div className="flex gap-2  items-center min-w-full  p-2">
+                        <img
+                          src={lang.flagUrl}
+                          alt={lang.name}
+                          className="w-8 rounded-md h-5"
+                        />
+                        <span className="font-semibold">{lang.name}</span>
+                      </div>
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+            </div>
           </div>
+
           <button
             onClick={handleTranslate}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition-colors"
+            className="w-4/6  bg-blue-500 text-lg hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition-colors"
           >
             Translate
           </button>
         </div>
         <div className="border p-4 rounded bg-gray-50 w-full">
-          <h2 className="text-xl font-semibold mb-2 text-black">Translation</h2>
+          <div className="flex mb-5 text-blue-500 gap-2">
+            <GiRobotGolem size={55} />
+            <TbLanguage size={50} />
+            <h2 className="text-xl font-semibold  mb-2 text-blue-500">Translation</h2>
+          </div>
           <p className="text-black">
             {translatedText || (
-              <span className={`transition-opacity duration-500 ${fade}`}>
-                {rotatingGreeting}
-              </span>
+              <span className={`transition-opacity duration-500 ${fade}`}></span>
             )}
           </p>
         </div>
