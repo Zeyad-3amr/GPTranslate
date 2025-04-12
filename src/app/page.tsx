@@ -35,9 +35,9 @@ const languageOptions = [
 
 export default function Home() {
   const [text, setText] = useState('');
-  // const [language, setLanguage] = useState('Spanish');
+
   const [toLanguage, setToLanguage] = useState(languageOptions[4]);
-  // const [greetingIndex, setGreetingIndex] = useState(0);
+
   const [fade, setFade] = useState('opacity-100');
   const [fromLanguage, setFromLanguage] = useState(languageOptions[0]);
   const [translatedText, setTranslatedText] = useState('');
@@ -53,8 +53,32 @@ export default function Home() {
     setTranslatedText(data.translation);
   };
 
-  // Current rotating greeting
-  // const rotatingGreeting = languageOptions[greetingIndex].greeting;
+  const handleSpeech = (text: string, langCode: string) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    utterance.lang = langCode;
+
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utterance);
+
+    console.log('click');
+  };
+
+  const playAudio = (audioBlob) => {
+    // Create a URL for the Blob
+    const audioUrl = URL.createObjectURL(audioBlob);
+
+    // Create a new Audio instance and play it
+    const audio = new Audio(audioUrl);
+    audio
+      .play()
+      .then(() => {
+        console.log('Audio is playing');
+      })
+      .catch((error) => {
+        console.error('Error playing audio:', error);
+      });
+  };
 
   return (
     <div className=" flex flex-col max-w-7xl items-center justify-center mx-auto px-6   ">
@@ -73,7 +97,14 @@ export default function Home() {
             placeholder="Enter text to translate..."
             rows={4}
           />
-
+          <div>
+            <button
+              onClick={() => handleSpeech(text, fromLanguage.code)}
+              className="bg-blue-500 p-2  text-xl  font-semibold transition-all duration-100 ease-in-out text-white  rounded hover:bg-blue-700"
+            >
+              🔊 Listen
+            </button>
+          </div>
           <div className=" flex justify-around w-full ">
             <div className="mb-4 flex justify-center items-center gap-3 ">
               <label className="text-blue-500 font-bold">From :</label>
@@ -121,11 +152,6 @@ export default function Home() {
               </Dropdown>
             </div>
 
-            {/* <div className="flex mb-5 text-blue-500 gap-2">
-              <GiRobotGolem size={55} />
-              <TbLanguage size={50} />
-            </div> */}
-
             <div className="mb-4 flex justify-center items-center gap-3 ">
               <label className="text-blue-500 font-bold">To:</label>
               <Dropdown>
@@ -149,7 +175,9 @@ export default function Home() {
                   selectionMode="single"
                   onAction={(key) => {
                     const lang = languageOptions.find((l) => l.code === key);
-                    if (lang) setToLanguage(lang);
+                    if (fromLanguage.name !== lang?.name && lang) {
+                      setToLanguage(lang);
+                    }
                   }}
                   className="bg-blue-500 w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-black custom-scrollbar"
                 >
@@ -175,7 +203,7 @@ export default function Home() {
 
           <button
             onClick={handleTranslate}
-            className="w-4/6  bg-blue-500 text-lg hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition-colors"
+            className="w-4/6  bg-blue-500 text-lg hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition-colors"
           >
             Translate
           </button>
@@ -191,6 +219,14 @@ export default function Home() {
               <span className={`transition-opacity duration-500 ${fade}`}></span>
             )}
           </p>
+          <div>
+            <button
+              onClick={() => handleSpeech(text, fromLanguage.code)}
+              className="bg-blue-500 p-2  text-xl  font-semibold transition-all duration-100 ease-in-out text-white  rounded hover:bg-blue-700"
+            >
+              🔊 Listen
+            </button>
+          </div>
         </div>
       </div>
     </div>
