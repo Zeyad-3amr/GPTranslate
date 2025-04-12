@@ -6,10 +6,13 @@ import {
   DropdownMenu,
   DropdownItem,
   Button,
+  // Progress,
 } from '@heroui/react';
 import { GiRobotGolem } from 'react-icons/gi';
 import { TbLanguage } from 'react-icons/tb';
-
+import { Progress } from '@heroui/react';
+import { Spinner } from '@heroui/react';
+// import { Spinner } from '@nextui-org/react';
 const languageOptions = [
   { name: 'English', code: 'en', flagUrl: 'https://flagcdn.com/w40/us.png' },
   { name: 'Spanish', code: 'es', flagUrl: 'https://flagcdn.com/w40/es.png' },
@@ -64,34 +67,16 @@ export default function Home() {
     console.log('click');
   };
 
-  const playAudio = (audioBlob) => {
-    // Create a URL for the Blob
-    const audioUrl = URL.createObjectURL(audioBlob);
-
-    // Create a new Audio instance and play it
-    const audio = new Audio(audioUrl);
-    audio
-      .play()
-      .then(() => {
-        console.log('Audio is playing');
-      })
-      .catch((error) => {
-        console.error('Error playing audio:', error);
-      });
-  };
-
   return (
     <div className=" flex flex-col max-w-7xl items-center justify-center mx-auto px-6   ">
       <div className="max-w-4xl  w-full space-y-6 ">
-        <div className="flex flex-col  items-center bg-white p-5  rounded border border-blue-400 shadow-lg w-full">
-          <div className="flex justify-center items-center  text-blue-500 gap-2">
-            <h1 className="text-3xl  font-bold text-center mb-3 text-blue-500">
-              GPTranslate
-            </h1>
+        <div className="flex flex-col  items-center p-5 shadow-md shadow-gray-700 rounded border border-blue-400  w-full">
+          <div className="flex justify-center items-center  text-white gap-2">
+            <h1 className="text-3xl  font-bold text-center mb-3 ">GPTranslate</h1>
             <TbLanguage size={50} />
           </div>
           <textarea
-            className="w-full font-semibold  p-3 border border-blue-400 rounded mb-4 focus:outline-none focus:ring-1 focus:ring-blue-400 text-black resize-none"
+            className="w-full font-semibold bg-gray-900  p-3 border border-blue-400 rounded mb-4 focus:outline-none focus:ring-1 focus:ring-blue-400 text-gray-200 resize-none"
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Enter text to translate..."
@@ -107,7 +92,7 @@ export default function Home() {
           </div>
           <div className=" flex justify-around w-full ">
             <div className="mb-4 flex justify-center items-center gap-3 ">
-              <label className="text-blue-500 font-bold">From :</label>
+              <label className="text-blue-500 text-xl font-bold">From</label>
               <Dropdown>
                 <DropdownTrigger className="flex ">
                   <Button
@@ -153,7 +138,7 @@ export default function Home() {
             </div>
 
             <div className="mb-4 flex justify-center items-center gap-3 ">
-              <label className="text-blue-500 font-bold">To:</label>
+              <label className=" text-xl font-bold">To </label>
               <Dropdown>
                 <DropdownTrigger className="flex ">
                   <Button
@@ -208,17 +193,22 @@ export default function Home() {
             Translate
           </button>
         </div>
-        <div className="border p-4 rounded bg-gray-50 w-full">
-          <div className="flex mb-5 text-blue-500 gap-2">
-            <GiRobotGolem size={55} />
-            <TbLanguage size={50} />
-            <h2 className="text-xl font-semibold  mb-2 text-blue-500">Translation</h2>
+        <div className="border p-4 rounded border-blue-400  w-full">
+          <div className="flex mb-5 justify-center items-center text-white gap-2">
+            <h1 className="text-xl font-bold  mb-2 ">GPTranslate</h1>
+            <GiRobotGolem size={45} />
+            {/* <TbLanguage size={35} /> */}
           </div>
-          <p className="text-black">
-            {translatedText || (
-              <span className={`transition-opacity duration-500 ${fade}`}></span>
-            )}
-          </p>
+          <div className="w-full font-semibold bg-gray-900  p-4 border border-blue-400 rounded mb-4 text-gray-200 ">
+            <p className="text-black">
+              {translatedText || (
+                <span className={`transition-opacity duration-500 ${fade}`}></span>
+              )}
+            </p>
+          </div>
+          <div className="flex flex-wrap items-end gap-8 text-blue-500">
+            {/* <Spinner color="white" size="lg" className="mr-2" /> */}
+          </div>
           <div>
             <button
               onClick={() => handleSpeech(text, fromLanguage.code)}

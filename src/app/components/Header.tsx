@@ -11,11 +11,9 @@ export default function Header() {
 
   return (
     <div>
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex items-center text-white justify-center gap-2">
         <GiRobotGolem size={55} />
-        <h1 className="text-3xl mt-8 font-bold text-center mb-10 text-white">
-          GPTranslate
-        </h1>
+        <h1 className="text-3xl mt-8 font-bold text-center mb-10 ">GPTranslate</h1>
         <TbLanguage size={50} />
       </div>
       <div className="flex gap-20 items-center justify-center border-b mb-8 border-blue-400">
