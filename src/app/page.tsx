@@ -15,33 +15,31 @@ import { Spinner } from '@heroui/react';
 import { BsSoundwave } from 'react-icons/bs';
 
 const languageOptions = [
+  { name: 'Arabic', code: 'ar', flagUrl: 'https://flagcdn.com/w40/sa.png' },
+  { name: 'Bengali', code: 'bn', flagUrl: 'https://flagcdn.com/w40/bd.png' },
+  { name: 'Chinese ', code: 'zh', flagUrl: 'https://flagcdn.com/w40/cn.png' },
+  { name: 'Dutch', code: 'nl', flagUrl: 'https://flagcdn.com/w40/nl.png' },
   { name: 'English', code: 'en', flagUrl: 'https://flagcdn.com/w40/us.png' },
-  { name: 'Spanish', code: 'es', flagUrl: 'https://flagcdn.com/w40/es.png' },
   { name: 'French', code: 'fr', flagUrl: 'https://flagcdn.com/w40/fr.png' },
   { name: 'German', code: 'de', flagUrl: 'https://flagcdn.com/w40/de.png' },
-  { name: 'Arabic', code: 'ar', flagUrl: 'https://flagcdn.com/w40/sa.png' },
-  { name: 'Chinese ', code: 'zh', flagUrl: 'https://flagcdn.com/w40/cn.png' },
   { name: 'Hindi', code: 'hi', flagUrl: 'https://flagcdn.com/w40/in.png' },
-  { name: 'Portuguese', code: 'pt', flagUrl: 'https://flagcdn.com/w40/pt.png' },
-  { name: 'Russian', code: 'ru', flagUrl: 'https://flagcdn.com/w40/ru.png' },
+  { name: 'Italian', code: 'it', flagUrl: 'https://flagcdn.com/w40/it.png' },
   { name: 'Japanese', code: 'ja', flagUrl: 'https://flagcdn.com/w40/jp.png' },
   { name: 'Korean', code: 'ko', flagUrl: 'https://flagcdn.com/w40/kr.png' },
-  { name: 'Italian', code: 'it', flagUrl: 'https://flagcdn.com/w40/it.png' },
-  { name: 'Turkish', code: 'tr', flagUrl: 'https://flagcdn.com/w40/tr.png' },
-  { name: 'Dutch', code: 'nl', flagUrl: 'https://flagcdn.com/w40/nl.png' },
-  { name: 'Bengali', code: 'bn', flagUrl: 'https://flagcdn.com/w40/bd.png' },
-  { name: 'Urdu', code: 'ur', flagUrl: 'https://flagcdn.com/w40/pk.png' },
-  { name: 'Vietnamese', code: 'vi', flagUrl: 'https://flagcdn.com/w40/vn.png' },
   { name: 'Persian', code: 'fa', flagUrl: 'https://flagcdn.com/w40/ir.png' },
+  { name: 'Portuguese', code: 'pt', flagUrl: 'https://flagcdn.com/w40/pt.png' },
+  { name: 'Russian', code: 'ru', flagUrl: 'https://flagcdn.com/w40/ru.png' },
+  { name: 'Spanish', code: 'es', flagUrl: 'https://flagcdn.com/w40/es.png' },
   { name: 'Swahili', code: 'sw', flagUrl: 'https://flagcdn.com/w40/ke.png' },
   { name: 'Thai', code: 'th', flagUrl: 'https://flagcdn.com/w40/th.png' },
+  { name: 'Turkish', code: 'tr', flagUrl: 'https://flagcdn.com/w40/tr.png' },
+  { name: 'Urdu', code: 'ur', flagUrl: 'https://flagcdn.com/w40/pk.png' },
+  { name: 'Vietnamese', code: 'vi', flagUrl: 'https://flagcdn.com/w40/vn.png' },
 ];
 
 export default function Home() {
   const [text, setText] = useState('');
-
   const [toLanguage, setToLanguage] = useState(languageOptions[4]);
-
   const [fade, setFade] = useState('opacity-100');
   const [fromLanguage, setFromLanguage] = useState(languageOptions[0]);
   const [translatedText, setTranslatedText] = useState('');
@@ -57,17 +55,30 @@ export default function Home() {
     setTranslatedText(data.translation);
   };
 
-  const handleSpeech = (text: string, langCode: string) => {
-    const utterance = new SpeechSynthesisUtterance(text);
+  const handleSpeech = async (text: string, langCode: string) => {
+    const res = await fetch('/api/speech', {
+      method: 'POST',
+      body: JSON.stringify({
+        text,
+        language: langCode,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-    utterance.lang = langCode;
+    if (!res.ok) {
+      console.error('Failed to get audio');
+      return;
+    }
 
-    speechSynthesis.cancel();
-    speechSynthesis.speak(utterance);
+    const buffer = await res.arrayBuffer();
+    const blob = new Blob([buffer], { type: 'audio/mpeg' });
+    const url = URL.createObjectURL(blob);
 
-    console.log('click');
+    const audio = new Audio(url);
+    audio.play();
   };
-
   return (
     <div className=" flex flex-col max-w-7xl items-center justify-center mx-auto px-6   ">
       <div className="max-w-4xl  w-full space-y-6 ">
@@ -133,12 +144,15 @@ export default function Home() {
                     if (lang) setFromLanguage(lang);
                     setText('');
                   }}
-                  className="bg-gray-900 border border-blue-500  w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-blue-950 custom-scrollbar"
+                  className="bg-gray-950 border border-gray-500  w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-blue-950 custom-scrollbar
+                   bg-gradient-to-r  from-transparent via-blue-900 to-transparent
+                  "
                 >
                   {languageOptions.map((lang) => (
                     <DropdownItem
                       key={lang.code}
-                      className=" flex justify-start mb-2  hover:bg-blue-700 rounded-md transition-all duration-100 ease-in-out"
+                      className=" flex justify-start mb-2  hover:bg-blue-800 
+                      rounded-md transition-all duration-100 ease-in-out "
                     >
                       <div className="flex gap-2 items-center min-w-full  p-2">
                         <img
@@ -183,12 +197,15 @@ export default function Home() {
                       setToLanguage(lang);
                     }
                   }}
-                  className="bg-gray-900 border border-blue-500  w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-blue-950 custom-scrollbar"
+                  className="bg-gray-950 border border-gray-500  w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-blue-950 custom-scrollbar
+                   bg-gradient-to-r  from-transparent via-blue-900 to-transparent
+                  "
                 >
                   {languageOptions.map((lang) => (
                     <DropdownItem
                       key={lang.code}
-                      className="flex justify-start mb-2  hover:bg-blue-800 rounded-md transition-all duration-100 ease-in-out"
+                      className="flex justify-start mb-2  hover:bg-blue-800 
+                      rounded-md transition-all duration-100 ease-in-out "
                     >
                       <div className="flex gap-2  items-center min-w-full  p-2">
                         <img
@@ -208,7 +225,7 @@ export default function Home() {
           <button
             onClick={handleTranslate}
             className="w-4/6 flex items-center justify-center text-lg text-white font-semibold py-2 px-4 rounded
-            border border-gray-400 transition-all duration-300 ease-in-out bg-gray-950 bg-gradient-to-r  from-transparent via-blue-900 to-transparent hover:bg-blue-950 hover:from-transparent hover:via-blue-700 
+            border border-gray-400 transition-all duration-300 ease-in-out bg-gray-950 bg-gradient-to-l  from-transparent via-blue-900 to-transparent hover:bg-blue-950 hover:from-transparent hover:via-blue-700 
             "
           >
             <TbLanguage size={30} />
@@ -244,7 +261,7 @@ export default function Home() {
           <div className="text-blue-500">
             <button
               onClick={() => handleSpeech(text, fromLanguage.code)}
-              className="flex items-center border border-gray-400  rounded py-1 px-3 shadow-sm shadow-gray-600 text-xl  font-semibold transition-all duration-300 ease-in-out bg-gray-950 bg-gradient-to-r  from-transparent via-blue-900 to-transparent hover:bg-blue-950 hover:from-transparent hover:via-blue-700 "
+              className="flex items-center border border-gray-400  rounded py-1 px-3 shadow-sm shadow-gray-600 text-xl  font-semibold transition-all duration-300 ease-in-out bg-gray-950 bg-gradient-to-br  from-transparent via-blue-900 to-transparent hover:bg-blue-950 hover:from-transparent hover:via-blue-700 "
             >
               <BsSoundwave size={30} color="white" />
             </button>

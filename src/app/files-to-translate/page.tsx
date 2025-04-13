@@ -8,7 +8,7 @@ export default function FilesToTranslate() {
     <div className=" flex flex-col justify-center items-center">
       <label className="mb-1 block font-bold">Upload Files To GPTalk To Translate</label>
 
-      <div className="flex w-full items-center justify-center p-2 transition-all duration-500">
+      <div className="flex w-full items-center justify-center p-2 transition-all duration-500 ">
         <div
           // onClick={handleDivClick} // Make the whole div clickable
           // onDragOver={handleDragOver}
