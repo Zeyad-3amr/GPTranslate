@@ -12,7 +12,8 @@ import { GiRobotGolem } from 'react-icons/gi';
 import { TbLanguage } from 'react-icons/tb';
 import { Progress } from '@heroui/react';
 import { Spinner } from '@heroui/react';
-// import { Spinner } from '@nextui-org/react';
+import { BsSoundwave } from 'react-icons/bs';
+
 const languageOptions = [
   { name: 'English', code: 'en', flagUrl: 'https://flagcdn.com/w40/us.png' },
   { name: 'Spanish', code: 'es', flagUrl: 'https://flagcdn.com/w40/es.png' },
@@ -70,39 +71,55 @@ export default function Home() {
   return (
     <div className=" flex flex-col max-w-7xl items-center justify-center mx-auto px-6   ">
       <div className="max-w-4xl  w-full space-y-6 ">
-        <div className="flex flex-col  items-center p-5 shadow-md shadow-gray-700 rounded border border-blue-400  w-full">
+        <div
+          className="flex flex-col  items-center p-5  rounded border border-gray-400 
+        bg-gradient-to-tl from-gray-950 via-blue-950 to-black animate-gradient-x bg-[length:800%_100%]
+        w-full"
+        >
           <div className="flex justify-center items-center  text-white gap-2">
-            <h1 className="text-3xl  font-bold text-center mb-3 ">GPTranslate</h1>
+            <h1
+              className="text-3xl  font-bold text-center mb-3
+            bg-gradient-to-r from-blue-100 via-blue-400 to-blue-200 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]
+            "
+            >
+              GPTranslate
+            </h1>
             <TbLanguage size={50} />
           </div>
           <textarea
-            className="w-full font-semibold bg-gray-900  p-3 border border-blue-400 rounded mb-4 focus:outline-none focus:ring-1 focus:ring-blue-400 text-gray-200 resize-none"
+            className="w-full font-semibold p-3 border border-gray-400 rounded mb-4 focus:outline-none focus:ring-1  focus:border-blue-400
+                  bg-gradient-to-r from-gray-950 via-blue-950 to-gray-950 
+            text-gray-200 resize-none"
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Enter text to translate..."
             rows={4}
           />
-          <div>
+          <div className="self-start ">
             <button
               onClick={() => handleSpeech(text, fromLanguage.code)}
-              className="bg-blue-500 p-2  text-xl  font-semibold transition-all duration-100 ease-in-out text-white  rounded hover:bg-blue-700"
+              className="flex items-center border border-gray-400  rounded py-1 px-3 shadow-sm shadow-gray-600 text-xl  font-semibold transition-all duration-300 ease-in-out bg-gray-950 bg-gradient-to-bl  from-transparent via-blue-900 to-transparent hover:bg-blue-950 hover:from-transparent hover:via-blue-700 "
             >
-              🔊 Listen
+              <BsSoundwave size={30} color="white" />
             </button>
           </div>
           <div className=" flex justify-around w-full ">
             <div className="mb-4 flex justify-center items-center gap-3 ">
-              <label className="text-blue-500 text-xl font-bold">From</label>
+              <label className=" text-xl font-bold">From</label>
               <Dropdown>
                 <DropdownTrigger className="flex ">
                   <Button
                     variant="bordered"
-                    className=" text-lg p-2 rounded-md bg-blue-500 hover:bg-blue-700 transition-all duration-100 ease-in-out font-semibold w-40 "
+                    className=" text-lg p-2 rounded-md  border border-gray-400 
+                    transition-all duration-300 ease-in-out font-semibold w-40 
+                    bg-gray-950 bg-gradient-to-r  from-transparent via-blue-900 to-transparent
+                    hover:bg-blue-950 hover:from-transparent hover:via-blue-700
+                    "
                   >
                     <img
                       src={fromLanguage.flagUrl}
                       alt={fromLanguage.name}
-                      className="w-10 h-6 border rounded"
+                      className="w-10 h-6 rounded shadow-sm shadow-blue-800"
                     />
                     {fromLanguage.name}
                   </Button>
@@ -116,7 +133,7 @@ export default function Home() {
                     if (lang) setFromLanguage(lang);
                     setText('');
                   }}
-                  className="bg-blue-500 w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-black custom-scrollbar"
+                  className="bg-gray-900 border border-blue-500  w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-blue-950 custom-scrollbar"
                 >
                   {languageOptions.map((lang) => (
                     <DropdownItem
@@ -143,13 +160,15 @@ export default function Home() {
                 <DropdownTrigger className="flex ">
                   <Button
                     variant="bordered"
-                    className=" text-lg p-2 rounded-md bg-blue-500 hover:bg-blue-700 transition-all duration-100 ease-in-out
-                    font-semibold w-40 "
+                    className=" text-lg p-2 rounded-md  border border-gray-400 
+                    transition-all duration-300 ease-in-out font-semibold w-40 
+                    bg-gray-950 bg-gradient-to-r  from-transparent via-blue-900 to-transparent
+                    hover:bg-blue-950 hover:from-transparent hover:via-blue-700 "
                   >
                     <img
                       src={toLanguage.flagUrl}
                       alt={toLanguage.name}
-                      className="w-10 h-6  border rounded"
+                      className="w-10 h-6  rounded shadow-sm shadow-blue-800"
                     />
                     {toLanguage.name}
                   </Button>
@@ -164,18 +183,18 @@ export default function Home() {
                       setToLanguage(lang);
                     }
                   }}
-                  className="bg-blue-500 w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-black custom-scrollbar"
+                  className="bg-gray-900 border border-blue-500  w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-blue-950 custom-scrollbar"
                 >
                   {languageOptions.map((lang) => (
                     <DropdownItem
                       key={lang.code}
-                      className="flex justify-start mb-2  hover:bg-blue-700 rounded-md transition-all duration-100 ease-in-out"
+                      className="flex justify-start mb-2  hover:bg-blue-800 rounded-md transition-all duration-100 ease-in-out"
                     >
                       <div className="flex gap-2  items-center min-w-full  p-2">
                         <img
                           src={lang.flagUrl}
                           alt={lang.name}
-                          className="w-8 rounded-md h-5"
+                          className="w-8 rounded-md h-5 "
                         />
                         <span className="font-semibold">{lang.name}</span>
                       </div>
@@ -188,33 +207,46 @@ export default function Home() {
 
           <button
             onClick={handleTranslate}
-            className="w-4/6  bg-blue-500 text-lg hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition-colors"
+            className="w-4/6 flex items-center justify-center text-lg text-white font-semibold py-2 px-4 rounded
+            border border-gray-400 transition-all duration-300 ease-in-out bg-gray-950 bg-gradient-to-r  from-transparent via-blue-900 to-transparent hover:bg-blue-950 hover:from-transparent hover:via-blue-700 
+            "
           >
+            <TbLanguage size={30} />
             Translate
           </button>
         </div>
-        <div className="border p-4 rounded border-blue-400  w-full">
+        <div
+          className="border p-4 rounded border-gray-400  w-full
+        bg-gradient-to-bl from-gray-950 via-blue-950 to-black animate-gradient-x bg-[length:150%_100%]
+        "
+        >
           <div className="flex mb-5 justify-center items-center text-white gap-2">
-            <h1 className="text-xl font-bold  mb-2 ">GPTranslate</h1>
+            <h1 className="text-3xl font-bold  mb-2 ">GPTranslate</h1>
             <GiRobotGolem size={45} />
-            {/* <TbLanguage size={35} /> */}
           </div>
-          <div className="w-full font-semibold bg-gray-900  p-4 border border-blue-400 rounded mb-4 text-gray-200 ">
+          <div
+            className="w-full font-semibold bg-gray-900  p-4 border border-gray-400 rounded mb-4 text-gray-200 
+          focus:outline-none focus:ring-1  focus:border-blue-400
+                  bg-gradient-to-r from-gray-950 via-blue-950 to-gray-950
+          "
+          >
             <p className="text-black">
               {translatedText || (
                 <span className={`transition-opacity duration-500 ${fade}`}></span>
               )}
             </p>
           </div>
-          <div className="flex flex-wrap items-end gap-8 text-blue-500">
-            {/* <Spinner color="white" size="lg" className="mr-2" /> */}
-          </div>
-          <div>
+          <div
+            className="flex flex-wrap items-end gap-8 text-blue-500
+          
+          "
+          ></div>
+          <div className="text-blue-500">
             <button
               onClick={() => handleSpeech(text, fromLanguage.code)}
-              className="bg-blue-500 p-2  text-xl  font-semibold transition-all duration-100 ease-in-out text-white  rounded hover:bg-blue-700"
+              className="flex items-center border border-gray-400  rounded py-1 px-3 shadow-sm shadow-gray-600 text-xl  font-semibold transition-all duration-300 ease-in-out bg-gray-950 bg-gradient-to-r  from-transparent via-blue-900 to-transparent hover:bg-blue-950 hover:from-transparent hover:via-blue-700 "
             >
-              🔊 Listen
+              <BsSoundwave size={30} color="white" />
             </button>
           </div>
         </div>

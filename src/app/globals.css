@@ -34,3 +34,22 @@ body {
   padding: 1rem;
   margin: 1rem;
 }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .animate-gradient-x {
+    animation: gradient-x 6s ease infinite;
+  }
+
+  @keyframes gradient-x {
+    0%,
+    100% {
+      background-position: left center;
+    }
+    50% {
+      background-position: right center;
+    }
+  }
+}
