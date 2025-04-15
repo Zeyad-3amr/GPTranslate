@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, language } = await request.json();
+    console.log('hi from back');
+    const { text } = await request.json();
 
     const response = await fetch(
       'https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb',
@@ -13,7 +14,7 @@ export async function POST(request: NextRequest) {
           'xi-api-key': process.env.ELEVEN_API_KEY!,
         },
         body: JSON.stringify({
-          text: text, // fixed
+          text: text,
           model_id: 'eleven_multilingual_v2',
           output_format: 'mp3_44100_128',
         }),
@@ -26,6 +27,7 @@ export async function POST(request: NextRequest) {
       status: 200,
       headers: {
         'Content-Type': 'audio/mpeg',
+        'Content-Length': audioBuffer.byteLength.toString(),
       },
     });
   } catch (error) {

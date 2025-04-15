@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { OpenAI } from 'openai';
-// import { HfInference } from '@huggingface/inference';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -23,7 +22,6 @@ export async function POST(request: NextRequest) {
       ],
     });
     const translation = response.choices[0].message.content || 'Error translating';
-  
 
     return NextResponse.json(translation);
   } catch (e) {

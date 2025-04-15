@@ -34,9 +34,6 @@ body {
   padding: 1rem;
   margin: 1rem;
 }
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @layer utilities {
   .animate-gradient-x {
@@ -52,4 +49,18 @@ body {
       background-position: right center;
     }
   }
+}
+
+@keyframes color-change {
+  0%,
+  100% {
+    background-color: #3b82f6; /* blue-500 */
+  }
+  50% {
+    background-color: #f59e0b; /* amber-500 */
+  }
+}
+
+.animate-color-change {
+  animation: color-change 1.4s ease-in-out infinite;
 }

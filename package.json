@@ -9,10 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@heroui/react": "^2.7.6",
     "@huggingface/inference": "^3.7.1",
+    "@nextui-org/react": "^2.6.11",
     "elevenlabs": "^1.56.1",
-    "next": "15.1.6",
+    "next": "^15.3.0",
     "openai": "^4.85.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

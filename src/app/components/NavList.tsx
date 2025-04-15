@@ -4,29 +4,36 @@ import { useState } from 'react';
 import { GiRobotGolem } from 'react-icons/gi';
 import { TbLanguage } from 'react-icons/tb';
 
-export default function Header() {
+export default function NavList() {
   const [activeTab, setActiveTab] = useState<'TextTranslate' | 'FileTranslate'>(
     'TextTranslate'
   );
 
   return (
-    <div>
+    <div
+      className="w-64  p-4 border-r bg-black border-gray-400 flex flex-col
+    bg-gradient-to-b from-black via-blue-900 to-black 
+    "
+    >
       <div className="flex items-center text-white justify-center gap-2 ">
-        <GiRobotGolem size={55} />
         <h1 className="text-3xl mt-8 font-bold text-center mb-10 bg-gradient-to-r from-blue-100 via-blue-400 to-blue-200 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
           GPTranslate
         </h1>
-        <TbLanguage size={50} />
+        <TbLanguage
+          size={50}
+          color="bg-gradient-to-r from-blue-700 via-blue-400 to-blue-200"
+          className=""
+        />
       </div>
-      <div className="flex gap-20 items-center justify-center border-b mb-8 border-gray-400">
-        <div className="flex gap-3 mb-5">
+      <div className="flex flex-col gap-20 items-center justify-center  mb-8 ">
+        <div className="flex flex-col gap-3 mb-5">
           <Link
             href="/"
             onClick={() => setActiveTab('TextTranslate')}
-            className={`p-2 transition-all duration-500 ease-in-out ${
+            className={`p-2 text-2xl font-bold transition-all duration-500 ease-in-out ${
               activeTab === 'TextTranslate'
-                ? 'border-b text-xl font-bold border-b-blue-400 text-white'
-                : 'text-gray-500 text-xl font-bold border-none'
+                ? '    rounded bg-gradient-to-r from-white via-blue-500 to-white bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]'
+                : 'text-gray-500  rounded'
             }`}
           >
             Text Translate
@@ -34,10 +41,10 @@ export default function Header() {
           <Link
             href="/files-to-translate"
             onClick={() => setActiveTab('FileTranslate')}
-            className={`p-2 transition-all duration-500 ease-in-out ${
+            className={`p-2 text-2xl font-bold transition-all duration-500 ease-in-out ${
               activeTab === 'FileTranslate'
-                ? 'border-b text-xl font-bold border-b-blue-400 text-white'
-                : 'text-gray-500 text-xl font-bold border-none'
+                ? '    rounded bg-gradient-to-r from-white via-blue-500 to-white bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]'
+                : 'text-gray-500  rounded'
             }`}
           >
             Files Translate
