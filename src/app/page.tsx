@@ -41,7 +41,7 @@ const languageOptions = [
 export default function Home() {
   const [text, setText] = useState('');
   const [toLanguage, setToLanguage] = useState(languageOptions[0]);
-
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [fromLanguage, setFromLanguage] = useState(languageOptions[4]);
   const [translatedText, setTranslatedText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -60,38 +60,42 @@ export default function Home() {
   };
 
   const handleSpeech = async (text: string, langCode: string) => {
-    const res = await fetch('/api/speech', {
-      method: 'POST',
-      body: JSON.stringify({
-        text: text.trim(),
-        language: langCode,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    if (isSpeaking) return;
+    setIsSpeaking(true);
 
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error('Speech error:', errText);
-      return;
+    try {
+      const res = await fetch('/api/speech', {
+        method: 'POST',
+        body: JSON.stringify({ text: text.trim(), language: langCode }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error('Speech error:', errText);
+        setIsSpeaking(false);
+        return;
+      }
+
+      const buffer = await res.arrayBuffer();
+      const blob = new Blob([buffer], { type: 'audio/mpeg' });
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+
+      audio.onended = () => {
+        setIsSpeaking(false);
+      };
+
+      audio.onerror = (e) => {
+        console.error('Audio error:', e);
+        setIsSpeaking(false);
+      };
+
+      await audio.play();
+    } catch (err) {
+      console.error('Playback failed:', err);
+      setIsSpeaking(false);
     }
-
-    const buffer = await res.arrayBuffer();
-    const blob = new Blob([buffer], { type: 'audio/mpeg' });
-    const url = URL.createObjectURL(blob);
-
-    const audio = new Audio(url);
-
-    // Add error event listener
-    audio.onerror = (e) => {
-      console.error('Audio play error:', e);
-    };
-
-    // Play audio and handle success/error
-    audio.play().catch((error) => {
-      console.error('Error playing audio:', error);
-    });
   };
   return (
     <div className="flex flex-col max-w-7xl items-center justify-center mx-auto px-6  ">
@@ -179,9 +183,10 @@ export default function Home() {
           />
           <div className="self-start ">
             <button
-              onClick={() => handleSpeech(text, fromLanguage.code)}
+              onClick={() => handleSpeech(text, toLanguage.code)}
               className="flex items-center border border-gray-400  rounded py-1 px-3 shadow-sm shadow-gray-600 text-xl  font-semibold transition-all duration-300 ease-in-out bg-blue-500 bg-gradient-to-r  from-transparent via-blue-700 to-transparent
-                    hover:bg-gray-950 hover:from-transparent hover:via-blue-700 "
+                    hover:bg-gray-950 hover:from-transparent hover:via-blue-700 
+                    "
             >
               <BsSoundwave size={30} color="white" />
             </button>
@@ -271,8 +276,16 @@ export default function Home() {
           <div className="text-blue-500">
             <button
               onClick={() => handleSpeech(translatedText, fromLanguage.code)}
-              className="flex items-center border border-gray-400  rounded py-1 px-3 shadow-sm shadow-gray-600 text-xl  font-semibold transition-all duration-300 ease-in-out bg-blue-500 bg-gradient-to-r  from-transparent via-blue-700 to-transparent
-                    hover:bg-gray-950 hover:from-transparent hover:via-blue-700  "
+              disabled={isSpeaking}
+              className={`flex items-center border border-gray-400 rounded py-1 px-3 shadow-sm shadow-gray-600 text-xl font-semibold transition-all duration-300 ease-in-out 
+            bg-blue-500 bg-gradient-to-r from-transparent via-blue-700 to-transparent 
+             hover:bg-gray-950 hover:from-transparent hover:via-blue-700 
+          ${
+            isSpeaking
+              ? 'opacity-50 cursor-not-allowed bg-gray-950 hover:from-transparent hover:via-blue-700 '
+              : ''
+          }
+  `}
             >
               <BsSoundwave size={30} color="white" />
             </button>
