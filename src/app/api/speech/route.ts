@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       status: 200,
       headers: {
         'Content-Type': 'audio/mpeg',
-        'Content-Length': audioBuffer.byteLength.toString(),
+        // 'Content-Length': audioBuffer.byteLength.toString(),
       },
     });
   } catch (error) {
