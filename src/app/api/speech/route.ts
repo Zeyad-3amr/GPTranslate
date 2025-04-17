@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
           'xi-api-key': process.env.ELEVEN_API_KEY!,
         },
         body: JSON.stringify({
-          text: text,
+          text,
           model_id: 'eleven_multilingual_v2',
           output_format: 'mp3_44100_128',
         }),
@@ -27,7 +27,6 @@ export async function POST(request: NextRequest) {
       status: 200,
       headers: {
         'Content-Type': 'audio/mpeg',
-        // 'Content-Length': audioBuffer.byteLength.toString(),
       },
     });
   } catch (error) {

@@ -14,11 +14,11 @@ export default function FilesToTranslate() {
           // onDragOver={handleDragOver}
           // onDragLeave={handleDragLeave}
           // onDrop={handleDrop}
-          className={`flex w-4/6 cursor-pointer flex-col justify-center self-center rounded-lg border-2 border-dashed border-blue-400 
+          className={`flex w-4/6 cursor-pointer flex-col justify-center self-center rounded-lg border-2 border-dashed border-gray-300 
              ${isDragging ? 'border-secondary bg-primary/10' : 'border-primary'} 
           p-6 transition-all duration-200`}
         >
-          <BiUpload className="self-center text-blue-400" size={50} />
+          <BiUpload className="self-center text-gray-300" size={50} />
 
           <p className="mt-2 self-center text-lg">Click or drag to upload</p>
           <p className="mt-2 self-center text-sm">

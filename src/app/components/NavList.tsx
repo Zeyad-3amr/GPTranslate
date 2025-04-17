@@ -12,11 +12,12 @@ export default function NavList() {
   return (
     <div
       className="w-64  p-4 border-r bg-black border-gray-400 flex flex-col
-    bg-gradient-to-b from-black via-blue-900 to-black 
+    bg-gradient-to-b from-gray-950 via-gray-700 to-gray-950 
+    
     "
     >
       <div className="flex items-center text-white justify-center gap-2 ">
-        <h1 className="text-3xl mt-8 font-bold text-center mb-10 bg-gradient-to-r from-blue-100 via-blue-400 to-blue-200 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
+        <h1 className="text-3xl mt-8 font-bold text-center mb-10 bg-gradient-to-r from-gray-100 via-gray-600 to-gray-200 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
           GPTranslate
         </h1>
         <TbLanguage
@@ -32,8 +33,8 @@ export default function NavList() {
             onClick={() => setActiveTab('TextTranslate')}
             className={`p-2 text-2xl font-bold transition-all duration-500 ease-in-out ${
               activeTab === 'TextTranslate'
-                ? '    rounded bg-gradient-to-r from-white via-blue-500 to-white bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]'
-                : 'text-gray-500  rounded'
+                ? '    rounded bg-gradient-to-r from-gray-50 via-gray-400 to-gray-50 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]'
+                : 'text-gray-600  rounded'
             }`}
           >
             Text Translate
@@ -43,8 +44,8 @@ export default function NavList() {
             onClick={() => setActiveTab('FileTranslate')}
             className={`p-2 text-2xl font-bold transition-all duration-500 ease-in-out ${
               activeTab === 'FileTranslate'
-                ? '    rounded bg-gradient-to-r from-white via-blue-500 to-white bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]'
-                : 'text-gray-500  rounded'
+                ? '    rounded bg-gradient-to-r from-gray-50 via-gray-300 to-gray-50 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]'
+                : 'text-gray-600  rounded'
             }`}
           >
             Files Translate

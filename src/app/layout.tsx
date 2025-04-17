@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="en" className="h-full">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased
-        bg-gray-950 bg-gradient-to-r  from-gray-950 via-blue-950 to-transparent
+        bg-black-950 bg-gradient-to-r  from-gray-950 via-gray-800 to-transparent
         w-full flex h-full
         `}
       >

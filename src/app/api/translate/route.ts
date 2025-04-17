@@ -7,13 +7,13 @@ const openai = new OpenAI({
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, fromLanguage, toLanguage } = await request.json();
+    const { text, sourceLanguage, targetLanguage } = await request.json();
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
         {
           role: 'system',
-          content: `You are a language translator. Your only task is to translate the following text from ${fromLanguage.name} to ${toLanguage.name}. Do not provide any extra explanations, comments, or help with the content. Translate exactly as the text appears, without any interpretation or additional advice.`,
+          content: `You are a language translator. Your only task is to translate the following text from ${sourceLanguage.name} to ${targetLanguage.name}. Do not provide any extra explanations, comments, or help with the content. Translate exactly as the text appears, without any interpretation or additional advice.`,
         },
         {
           role: 'user',

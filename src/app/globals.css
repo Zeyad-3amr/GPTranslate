@@ -28,9 +28,9 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #60a5fa; /* light blue thumb */
+  background-color: #c6c6c6; /* light blue thumb */
   border-radius: 9999px;
-  border: 2px solid #1e3a8a;
+  border: 1px solid #000000;
   padding: 1rem;
   margin: 1rem;
 }
@@ -50,16 +50,16 @@ body {
     }
   }
 }
-
+/* 
 @keyframes color-change {
   0%,
   100% {
-    background-color: #3b82f6; /* blue-500 */
+    background-color: #3b82f6; 
   }
   50% {
-    background-color: #f59e0b; /* amber-500 */
+    background-color: #f59e0b; 
   }
-}
+} */
 
 .animate-color-change {
   animation: color-change 1.4s ease-in-out infinite;
