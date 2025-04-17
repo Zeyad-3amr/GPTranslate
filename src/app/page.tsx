@@ -8,7 +8,7 @@ import {
   Button,
   // Progress,
 } from '@heroui/react';
-
+import { useRef } from 'react';
 import { TbLanguage } from 'react-icons/tb';
 import { BsSoundwave } from 'react-icons/bs';
 import Loader from './components/Loader';
@@ -45,6 +45,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSourceSpeaking, setIsSourceSpeaking] = useState(false);
   const [isTargetSpeaking, setIsTargetSpeaking] = useState(false);
+  const currentAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleTranslate = async () => {
     try {
@@ -75,9 +76,23 @@ export default function Home() {
     }
   };
 
-  const handleSpeech = async (text: string) => {
-    if (isSpeaking) return;
-    setIsSpeaking(true);
+  const handleSpeech = async (text: string, type: 'source' | 'target') => {
+    // Stop any currently playing audio
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current.currentTime = 0;
+      currentAudioRef.current = null;
+    }
+
+    // Reset speaking states
+    setIsSourceSpeaking(false);
+    setIsTargetSpeaking(false);
+
+    if (!text.trim()) return;
+
+    // Update which is speaking
+    if (type === 'source') setIsSourceSpeaking(true);
+    else setIsTargetSpeaking(true);
 
     try {
       const res = await fetch('/api/speech', {
@@ -89,40 +104,38 @@ export default function Home() {
       if (!res.ok) {
         const errText = await res.text();
         console.error('Speech error:', errText);
-        setIsSpeaking(false);
         return;
       }
 
       const buffer = await res.arrayBuffer();
       if (!buffer) {
         console.error('No audio buffer received.');
-        setIsSpeaking(false);
         return;
       }
 
       const blob = new Blob([buffer], { type: 'audio/mpeg' });
       const url = URL.createObjectURL(blob);
       const audio = new Audio(url);
+      currentAudioRef.current = audio;
 
       audio.onended = () => {
-        console.log('Audio playback finished.');
-        setIsSpeaking(false);
+        setIsSourceSpeaking(false);
+        setIsTargetSpeaking(false);
+        currentAudioRef.current = null;
       };
 
       audio.onerror = (e) => {
         console.error('Audio playback error:', e);
-        setIsSpeaking(false);
+        setIsSourceSpeaking(false);
+        setIsTargetSpeaking(false);
+        currentAudioRef.current = null;
       };
 
-      try {
-        await audio.play();
-      } catch (playbackError) {
-        console.error('Error playing audio:', playbackError);
-        setIsSpeaking(false);
-      }
+      await audio.play();
     } catch (err) {
       console.error('Speech playback failed:', err);
-      setIsSpeaking(false);
+      setIsSourceSpeaking(false);
+      setIsTargetSpeaking(false);
     }
   };
 
@@ -210,15 +223,15 @@ export default function Home() {
           />
           <div className="self-start ">
             <button
-              onClick={() => handleSpeech(text)}
-              disabled={isSpeaking}
+              onClick={() => handleSpeech(text, 'source')}
+              disabled={isSourceSpeaking}
               className={`flex items-center border border-gray-400 rounded py-1 px-3 shadow-sm shadow-gray-600 text-xl font-semibold transition-all duration-300 ease-in-out 
                 bg-gray-500 bg-gradient-to-r from-transparent via-gray-200 to-transparent hover:bg-gray-950 hover:from-transparent hover:via-gray-300 hover:shadow-sm hover:shadow-white 
-             ${
-               isSpeaking
-                 ? 'opacity-50 cursor-not-allowed bg-gray-950 hover:from-transparent hover:via-blue-700 '
-                 : ''
-             }
+         ${
+           isSourceSpeaking
+             ? 'opacity-50 cursor-not-allowed bg-gray-950 hover:from-transparent hover:via-blue-700 '
+             : ''
+         }
      `}
             >
               <BsSoundwave size={30} color="black" />
@@ -297,7 +310,7 @@ export default function Home() {
                bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 
             "
             >
-              <p className="text-white">{translatedText}</p>
+              <p className="text-gray-900">{translatedText}</p>
             </div>
           ) : (
             <div className="flex p-2 justify-center items-center">
@@ -306,12 +319,12 @@ export default function Home() {
           )}
           <div className="text-gray-800">
             <button
-              onClick={() => handleSpeech(translatedText)}
-              disabled={isSpeaking}
+              onClick={() => handleSpeech(translatedText, 'target')}
+              disabled={isTargetSpeaking}
               className={`flex items-center border border-gray-400 rounded py-1 px-3 shadow-sm shadow-gray-600 text-xl font-semibold transition-all duration-300 ease-in-out 
              bg-gray-500 bg-gradient-to-r from-transparent via-gray-200 to-transparent hover:bg-gray-950 hover:from-transparent hover:via-gray-300 hover:shadow-sm hover:shadow-white 
           ${
-            isSpeaking
+            isTargetSpeaking
               ? 'opacity-50 cursor-not-allowed bg-gray-950 hover:from-transparent hover:via-blue-700 '
               : ''
           }
