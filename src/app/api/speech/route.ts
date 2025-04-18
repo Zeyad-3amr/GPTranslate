@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('hi from back');
     const { text } = await request.json();
 
     const response = await fetch(

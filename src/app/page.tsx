@@ -6,11 +6,11 @@ import {
   DropdownMenu,
   DropdownItem,
   Button,
-  // Progress,
 } from '@heroui/react';
 import { useRef } from 'react';
 import { TbLanguage } from 'react-icons/tb';
 import { BsSoundwave } from 'react-icons/bs';
+import { TbXboxXFilled } from 'react-icons/tb';
 import Loader from './components/Loader';
 
 const languageOptions = [
@@ -39,8 +39,8 @@ const languageOptions = [
 export default function Home() {
   const [text, setText] = useState('');
   const [targetLanguage, setTargetLanguage] = useState(languageOptions[0]);
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [sourceLanguage, setSourceLanguage] = useState(languageOptions[4]);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [translatedText, setTranslatedText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSourceSpeaking, setIsSourceSpeaking] = useState(false);
@@ -60,12 +60,9 @@ export default function Home() {
       if (!res.ok) {
         const errorData = await res.json();
         console.error('Translation error:', errorData);
-
         return;
       }
-
       const data = await res.json();
-      console.log(data);
       if (data) {
         setTranslatedText(data);
       }
@@ -77,20 +74,17 @@ export default function Home() {
   };
 
   const handleSpeech = async (text: string, type: 'source' | 'target') => {
-    // Stop any currently playing audio
     if (currentAudioRef.current) {
       currentAudioRef.current.pause();
       currentAudioRef.current.currentTime = 0;
       currentAudioRef.current = null;
     }
 
-    // Reset speaking states
     setIsSourceSpeaking(false);
     setIsTargetSpeaking(false);
 
     if (!text.trim()) return;
 
-    // Update which is speaking
     if (type === 'source') setIsSourceSpeaking(true);
     else setIsTargetSpeaking(true);
 
@@ -119,6 +113,7 @@ export default function Home() {
       currentAudioRef.current = audio;
 
       audio.onended = () => {
+        setIsSpeaking(false);
         setIsSourceSpeaking(false);
         setIsTargetSpeaking(false);
         currentAudioRef.current = null;
@@ -137,6 +132,20 @@ export default function Home() {
       setIsSourceSpeaking(false);
       setIsTargetSpeaking(false);
     }
+  };
+
+  const stopCurrentAudio = (type: 'source' | 'target') => {
+    if (type === 'source') setIsSourceSpeaking(true);
+    else setIsTargetSpeaking(true);
+
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current.currentTime = 0;
+      currentAudioRef.current = null;
+    }
+
+    setIsSourceSpeaking(false);
+    setIsTargetSpeaking(false);
   };
 
   return (
@@ -187,14 +196,14 @@ export default function Home() {
                       setText('');
                     }
                   }}
-                  className="bg-gray-400 border border-gray-200  w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-gray-800 custom-scrollbar
-                   bg-gradient-to-r from-transparent via-gray-500 to-transparent
+                  className="bg-gray-800 border border-gray-500  w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-gray-800 custom-scrollbar
+                   bg-gradient-to-r  from-transparent via-gray-500 to-transparent
                   "
                 >
                   {languageOptions.map((lang) => (
                     <DropdownItem
                       key={lang.code}
-                      className=" flex justify-start mb-2  hover:bg-gray-800 
+                      className=" flex justify-start mb-2  hover:bg-gray-900 
                         rounded-md transition-all duration-100 ease-in-out "
                     >
                       <div className="flex gap-2 items-center min-w-full  p-2">
@@ -213,15 +222,15 @@ export default function Home() {
           </div>
           <textarea
             className="w-full h-full font-semibold p-3 border border-gray-400 rounded mb-4 focus:outline-none focus:ring-1  focus:border-white
-                  bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 
-                 placeholder:text-gray-600
-            text-gray-900  resize-none"
+                  bg-gradient-to-r from-gray-600 via-gray-700 to-gray-600 
+                 placeholder:text-gray-400
+            text-gray-100  resize-none"
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Enter text to translate..."
             rows={4}
           />
-          <div className="self-start ">
+          <div className="self-start flex items-center gap-2 ">
             <button
               onClick={() => handleSpeech(text, 'source')}
               disabled={isSourceSpeaking}
@@ -229,13 +238,21 @@ export default function Home() {
                 bg-gray-500 bg-gradient-to-r from-transparent via-gray-200 to-transparent hover:bg-gray-950 hover:from-transparent hover:via-gray-300 hover:shadow-sm hover:shadow-white 
          ${
            isSourceSpeaking
-             ? 'opacity-50 cursor-not-allowed bg-gray-950 hover:from-transparent hover:via-blue-700 '
+             ? 'opacity-50 cursor-not-allowed bg-gray-950 hover:from-transparent '
              : ''
          }
      `}
             >
               <BsSoundwave size={30} color="black" />
             </button>
+            {isSourceSpeaking ? (
+              <div
+                className=" text-red-500 hover cursor-pointer hover:text-red-800 "
+                onClick={() => stopCurrentAudio('source')}
+              >
+                <TbXboxXFilled size={20} />
+              </div>
+            ) : null}
           </div>
 
           <button
@@ -280,14 +297,14 @@ export default function Home() {
                     setTargetLanguage(lang);
                   }
                 }}
-                className="bg-gray-950 border border-gray-500  w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-gray-800 custom-scrollbar
+                className="bg-gray-800 border border-gray-500  w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-gray-800 custom-scrollbar
                    bg-gradient-to-r  from-transparent via-gray-500 to-transparent
                   "
               >
                 {languageOptions.map((lang) => (
                   <DropdownItem
                     key={lang.code}
-                    className="flex justify-start mb-2  hover:bg-blue-800 
+                    className="flex justify-start mb-2  hover:bg-gray-900 
                       rounded-md transition-all duration-100 ease-in-out "
                   >
                     <div className="flex gap-2  items-center min-w-full  p-2">
@@ -306,32 +323,39 @@ export default function Home() {
           {!isLoading ? (
             <div
               className="w-full  font-semibold bg-gray-900  p-4 border border-gray-400 rounded mb-4 text-gray-200 
-            focus:outline-none focus:ring-1  focus:border-blue-400
-               bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 
+               bg-gradient-to-r from-gray-600 via-gray-700 to-gray-600 
             "
             >
-              <p className="text-gray-900">{translatedText}</p>
+              <p className="text-gray-100">{translatedText}</p>
             </div>
           ) : (
             <div className="flex p-2 justify-center items-center">
               <Loader />
             </div>
           )}
-          <div className="text-gray-800">
+          <div className="self-start flex items-center gap-2 ">
             <button
               onClick={() => handleSpeech(translatedText, 'target')}
               disabled={isTargetSpeaking}
               className={`flex items-center border border-gray-400 rounded py-1 px-3 shadow-sm shadow-gray-600 text-xl font-semibold transition-all duration-300 ease-in-out 
-             bg-gray-500 bg-gradient-to-r from-transparent via-gray-200 to-transparent hover:bg-gray-950 hover:from-transparent hover:via-gray-300 hover:shadow-sm hover:shadow-white 
-          ${
-            isTargetSpeaking
-              ? 'opacity-50 cursor-not-allowed bg-gray-950 hover:from-transparent hover:via-blue-700 '
-              : ''
-          }
-  `}
+                bg-gray-500 bg-gradient-to-r from-transparent via-gray-200 to-transparent hover:bg-gray-950 hover:from-transparent hover:via-gray-300 hover:shadow-sm hover:shadow-white 
+         ${
+           isTargetSpeaking
+             ? 'opacity-50 cursor-not-allowed bg-gray-950 hover:from-transparent '
+             : ''
+         }
+     `}
             >
               <BsSoundwave size={30} color="black" />
             </button>
+            {isTargetSpeaking ? (
+              <div
+                className=" text-red-500 hover cursor-pointer hover:text-red-800 "
+                onClick={() => stopCurrentAudio('source')}
+              >
+                <TbXboxXFilled size={20} />
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
