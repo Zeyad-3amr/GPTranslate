@@ -50,16 +50,6 @@ body {
     }
   }
 }
-/* 
-@keyframes color-change {
-  0%,
-  100% {
-    background-color: #3b82f6; 
-  }
-  50% {
-    background-color: #f59e0b; 
-  }
-} */
 
 .animate-color-change {
   animation: color-change 1.4s ease-in-out infinite;

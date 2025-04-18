@@ -1,7 +1,6 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
-import { GiRobotGolem } from 'react-icons/gi';
 import { TbLanguage } from 'react-icons/tb';
 
 export default function NavList() {
@@ -37,7 +36,7 @@ export default function NavList() {
                 : 'text-gray-600  rounded'
             }`}
           >
-            Text Translate
+            Text
           </Link>
           <Link
             href="/files-to-translate"
@@ -48,7 +47,7 @@ export default function NavList() {
                 : 'text-gray-600  rounded'
             }`}
           >
-            Files Translate
+            Files
           </Link>
         </div>
       </div>
