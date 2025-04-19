@@ -40,7 +40,6 @@ export default function Home() {
   const [text, setText] = useState('');
   const [targetLanguage, setTargetLanguage] = useState(languageOptions[0]);
   const [sourceLanguage, setSourceLanguage] = useState(languageOptions[4]);
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [translatedText, setTranslatedText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSourceSpeaking, setIsSourceSpeaking] = useState(false);
@@ -113,7 +112,6 @@ export default function Home() {
       currentAudioRef.current = audio;
 
       audio.onended = () => {
-        setIsSpeaking(false);
         setIsSourceSpeaking(false);
         setIsTargetSpeaking(false);
         currentAudioRef.current = null;
