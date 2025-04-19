@@ -120,7 +120,9 @@ export default function FilesToTranslate() {
     }
   };
 
-  const handleTranslate = async () => {};
+  const handleTranslate = async () => {
+    if (!file) return;
+  };
 
   return (
     <div className=" flex flex-col gap-5 justify-center items-center">
@@ -130,7 +132,7 @@ export default function FilesToTranslate() {
         {!file ? (
           <div className="flex  w-full items-center mb-4 justify-center p-2 transition-all duration-500 ">
             <div
-              onClick={handleDivClick} // Make the whole div clickable
+              onClick={handleDivClick}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
@@ -175,11 +177,15 @@ export default function FilesToTranslate() {
           <div className="flex gap-3">
             <p className=" self-center font-bold">Translate To</p>
 
-            <DropDown />
+            <DropDown
+              targetLanguage={targetLanguage}
+              setTargetLanguage={setTargetLanguage}
+              languageOptions={languageOptions}
+            />
           </div>
           <button
             onClick={handleTranslate}
-            className="w-3/12 flex items-center justify-center text-lg text-gray-900 font-semibold py-2 px-4 rounded
+            className="w-3/12 flex items-center justify-center text-lg text-gray-900 font-semibold  p-2 rounded
             border border-gray-400 transition-all duration-300 ease-in-out bg-gray-500 bg-gradient-to-r  from-transparent via-gray-200 to-transparent
                     hover:bg-gray-950 hover:from-transparent hover:via-gray-300  hover:shadow-sm hover:shadow-white
             "

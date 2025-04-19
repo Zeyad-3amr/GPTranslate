@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from 'react';
 import {
   Dropdown,
   DropdownTrigger,
@@ -7,35 +6,31 @@ import {
   DropdownItem,
   Button,
 } from '@heroui/react';
-const languageOptions = [
-  { name: 'Arabic', code: 'ar', flagUrl: 'https://flagcdn.com/w40/sa.png' },
-  { name: 'Bengali', code: 'bn', flagUrl: 'https://flagcdn.com/w40/bd.png' },
-  { name: 'Chinese ', code: 'zh', flagUrl: 'https://flagcdn.com/w40/cn.png' },
-  { name: 'Dutch', code: 'nl', flagUrl: 'https://flagcdn.com/w40/nl.png' },
-  { name: 'English', code: 'en', flagUrl: 'https://flagcdn.com/w40/us.png' },
-  { name: 'French', code: 'fr', flagUrl: 'https://flagcdn.com/w40/fr.png' },
-  { name: 'German', code: 'de', flagUrl: 'https://flagcdn.com/w40/de.png' },
-  { name: 'Hindi', code: 'hi', flagUrl: 'https://flagcdn.com/w40/in.png' },
-  { name: 'Italian', code: 'it', flagUrl: 'https://flagcdn.com/w40/it.png' },
-  { name: 'Japanese', code: 'ja', flagUrl: 'https://flagcdn.com/w40/jp.png' },
-  { name: 'Korean', code: 'ko', flagUrl: 'https://flagcdn.com/w40/kr.png' },
-  { name: 'Persian', code: 'fa', flagUrl: 'https://flagcdn.com/w40/ir.png' },
-  { name: 'Portuguese', code: 'pt', flagUrl: 'https://flagcdn.com/w40/pt.png' },
-  { name: 'Russian', code: 'ru', flagUrl: 'https://flagcdn.com/w40/ru.png' },
-  { name: 'Spanish', code: 'es', flagUrl: 'https://flagcdn.com/w40/es.png' },
-  { name: 'Swahili', code: 'sw', flagUrl: 'https://flagcdn.com/w40/ke.png' },
-  { name: 'Thai', code: 'th', flagUrl: 'https://flagcdn.com/w40/th.png' },
-  { name: 'Turkish', code: 'tr', flagUrl: 'https://flagcdn.com/w40/tr.png' },
-  { name: 'Urdu', code: 'ur', flagUrl: 'https://flagcdn.com/w40/pk.png' },
-  { name: 'Vietnamese', code: 'vi', flagUrl: 'https://flagcdn.com/w40/vn.png' },
-];
-export default function DropDown() {
-  const [targetLanguage, setTargetLanguage] = useState(languageOptions[0]);
 
+interface Language {
+  name: string;
+  code: string;
+  flagUrl: string;
+}
+interface languageOptions {
+  name: string;
+  code: string;
+  flagUrl: string;
+}
+
+export default function DropDown({
+  targetLanguage,
+  setTargetLanguage,
+  languageOptions,
+}: {
+  targetLanguage: Language;
+  setTargetLanguage: (language: Language) => void;
+  languageOptions: languageOptions[];
+}) {
   return (
-    <div className=" gap-3 ">
+    <div className="gap-3">
       <Dropdown>
-        <DropdownTrigger className="flex ">
+        <DropdownTrigger className="flex">
           <Button
             variant="bordered"
             className=" text-lg text-gray-800 p-2 rounded-md w-full border border-gray-400 font-semibold
@@ -59,7 +54,6 @@ export default function DropDown() {
 
             if (targetLanguage.name !== lang?.name && lang) {
               setTargetLanguage(lang);
-              // setText('');
             }
           }}
           className="bg-gray-800 border border-gray-500  w-full max-h-80 overflow-y-auto rounded-md shadow-lg shadow-gray-800 custom-scrollbar
