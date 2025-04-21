@@ -122,6 +122,34 @@ export default function FilesToTranslate() {
 
   const handleTranslate = async () => {
     if (!file) return;
+    try {
+      const res = await fetch('/api/files', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fileName: file.name,
+          fileBase64: file.base64,
+          targetLanguage: targetLanguage.name,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        const link = document.createElement('a');
+        link.href = data.translatedFileBase64;
+        link.download = data.translatedFileName;
+        link.click();
+      } else {
+        console.error('Translation failed:', data.error);
+        alert('Translation failed: ' + data.error);
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+      alert('Something went wrong during translation.');
+    }
   };
 
   return (
